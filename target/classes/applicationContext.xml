@@ -21,10 +21,99 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
 		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd">
 	<!-- 在 spring 中 定義一個 Hello 物件 (Hello 物件未來將由 Spring 管理) -->
+	<!-- session01 -->
 	<bean id="hello" class="spring.core.session01.beans.Hello"/>
 	<!-- scope 預設是 singleton 使用單一物件 -->
 	<bean id="lotto" scope="singleton" class="spring.core.session01.beans.Lotto"/>
 	<bean id="lotto2" scope="singleton" class="spring.core.session01.beans.Lotto"/>
 	<!-- scope prototype 有使用物件時才會建立 -->
 	<bean id="lucky" scope="prototype" class="spring.core.session01.beans.Lucky"/>
+	
+	<!-- session02 -->
+	<bean id="author1" scope="prototype" class="spring.core.session02.beans.Author"/>
+	<bean id="author2" scope="prototype" class="spring.core.session02.beans.Author">
+		<!--方法注入 -->
+		<property name="name"> <!-- name 會直接對應到 Author的 setName()方法 -->
+			<value>Ban</value>
+		</property>
+		<property name="sex"> <!-- sex 會直接對應到 Author的 setSex()方法 -->
+			<value>M</value>
+		</property>
+		<property name="age"> <!-- age 會直接對應到 Author的 setAge()方法 -->
+			<value>30</value>
+		</property>
+	</bean>
+	
+	<bean id="author3" class="spring.core.session02.beans.Author">
+		<!-- 建構子注入 -->
+		<constructor-arg index="0" value="Bobo"/>
+		<constructor-arg index="1" value="M"/>
+		<constructor-arg index="2" value="80"/>
+	</bean>
+	
+	<!--簡易版的 p(property) 方法注入 -->
+	<bean id="author4" class="spring.core.session02.beans.Author" 
+			p:name="Helen" p:sex="F" p:age="60"/>
+			
+	<!-- 簡易版的 c(constructor) 建構子注入 -->
+	<bean id="author5" class="spring.core.session02.beans.Author"
+			c:name="Mary" c:sex="F" c:age="99"/>
+	
+	<!-- 無注入配置 -->
+	<bean id="book1" class="spring.core.session02.beans.Book"/>
+		
+	<!-- 在 book 中 透過 ref 來配置 Author -->
+	<bean id="book2" class="spring.core.session02.beans.Book">
+		<property name="name">
+			<value>Java</value>
+		</property>
+		<property name="price">
+			<value>500</value>
+		</property>
+		<property name="author" ref="author2"/>
+	</bean>
+	
+	<!-- 在 book 建構子中 透過 ref 來配置 Author-->
+	<bean id="book3" class="spring.core.session02.beans.Book">
+		<!-- 建構子注入 -->
+		<constructor-arg index="0" value="Python"/>
+		<constructor-arg index="1" value="500"/>
+		<constructor-arg index="2" ref="author3"/> <!-- ref 建構子注入 -->
+	</bean>
+	
+	<!-- 在 book 建構子中 透過 p:author-ref 來配置 Author-->
+	<bean id="book4" class="spring.core.session02.beans.Book"
+		p:name="C" p:price="800" p:author-ref="author3"
+	/>
+		
+	<!-- 在 book 建構子中 透過 c:author-ref 來配置 Author-->
+	<bean id="book5" class="spring.core.session02.beans.Book"
+		c:name="C#" c:price="1800" c:author-ref="author4"
+	/>
+	
+	<!-- 在 book 中 混用 透過 p:author-ref ,c:author-ref 來配置 Author-->
+	<bean id="book6" class="spring.core.session02.beans.Book"
+		c:name="C++" c:price="18000" p:author-ref="author4"
+	/>
+	
+	<!-- session02.meterial -->
+	<!-- Paper , Color , Size -->
+	<bean id="color" class="spring.core.session02.beans.material.Color" p:name="白色"/>
+	<bean id="red" class="spring.core.session02.beans.material.Color" p:name="紅色"/>
+	<bean id="size" class="spring.core.session02.beans.material.Size" p:name="A4"/>
+	<bean id="b3" class="spring.core.session02.beans.material.Size" p:name="B3"/>
+	
+	<!-- 自動配置 -->
+	<!-- byType 的限制 : 整個設定檔中只能有一個匹配型別 若超過一個可匹配的型別 就會發生錯誤 -->
+	<!--
+	<bean id="paper" class="spring.core.session02.beans.material.Paper" p:id="101" autowire="byType"/>
+	-->
+	<!-- byName 根據(id) -->
+	<bean id="paper2" class="spring.core.session02.beans.material.Paper" p:id="102" autowire="byName"/>
+	
+	<bean id="paper3" class="spring.core.session02.beans.material.PaperRedB3" p:id="103" autowire="byName"/>
+	
+	<!-- By construstor 建構子自動配置 -->
+	<!-- Paper 的建構子參數名稱會對應到指定的id名稱 -->
+	<bean id="paper4" class="spring.core.session02.beans.material.Paper" p:id="104" autowire="constructor"/>
 </beans>
