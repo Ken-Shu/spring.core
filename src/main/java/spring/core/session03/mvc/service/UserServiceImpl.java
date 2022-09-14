@@ -11,8 +11,9 @@ import spring.core.session03.mvc.repository.UserDao;
 @Service
 public class UserServiceImpl implements UserService{
 
-	@Autowired // 自動綁定 自動會尋找有實作 UserDao 介面的類別 並且建立該類別的實體物件
-			   // 以本案來說會自動找到 UserDaoImpl 類別 ， 並且自動透過 new UserDaoImpl() 建立物件
+	// 自動綁定 自動會尋找有實作 UserDao 介面的類別 並且建立該類別的實體物件
+	// 以本案來說會自動找到 UserDaoImpl 類別 ， 並且自動透過 new UserDaoImpl() 建立物件	
+	@Autowired
 	private UserDao userDao;
 	
 	@Override
