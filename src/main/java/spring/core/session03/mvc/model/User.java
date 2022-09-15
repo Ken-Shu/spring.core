@@ -6,21 +6,24 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-//@Component //是一個可以被 Spring 來管理的物件
-@ComponentScan({
-	"spring\\core\\session03\\mvc\\controller\\UserController",
-	"spring\\core\\session03\\mvc\\repository\\UserDaoImpl",
-	"spring\\core\\session03\\mvc\\service\\UserServiceImpl"
-})
+@Component //是一個可以被 Spring 來管理的物件
+//@ComponentScan({
+//	"spring\\core\\session03\\mvc\\controller\\UserController",
+//	"spring\\core\\session03\\mvc\\repository\\UserDaoImpl",
+//	"spring\\core\\session03\\mvc\\service\\UserServiceImpl"
+//})
+@Configuration
 @Scope(value = "prototype")
-//@PropertySource(value = {"classpath:user.properities"})
-@PropertySource(value = "file:///C:\\Users\\Ken_Shu\\git\\spring.core\\conf\\user.properities")
+@PropertySource(value = "classpath:user.properities")
+//@PropertySource(value = "file:///C:\\Users\\MB-207\\git\\spring.core\\conf\\user.properities")
 public class User { //使用者資料模型
 	
 	//@Value(value = "John") // 配置預設值

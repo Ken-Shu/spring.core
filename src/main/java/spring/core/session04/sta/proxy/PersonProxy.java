@@ -15,8 +15,11 @@ public class PersonProxy implements Person{
 	public void work() {
 		// before: 代理執行公用邏輯
 		System.out.println("戴口罩");
-		
-		// 代理執行業務方法
-		person.work();
+		try {
+			// 代理執行業務方法
+			person.work();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 }

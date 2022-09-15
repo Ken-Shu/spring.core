@@ -7,14 +7,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import spring.core.session03.mvc.controller.UserController;
 import spring.core.session03.mvc.model.User;
-import spring.core.session03.mvc.service.UserService;
 
 public class TestMVCUser {
 
 	@Test
 	public void test() {
-		//ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(User.class);
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		//AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(User.class);
 		
 		// 類別名稱第一個字母小寫就是"user"
 		User user1 = ctx.getBean("user",User.class);
