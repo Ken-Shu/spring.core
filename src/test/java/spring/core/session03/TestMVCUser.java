@@ -12,7 +12,8 @@ public class TestMVCUser {
 
 	@Test
 	public void test() {
-		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		//ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("aop-config.xml");
 		//AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(User.class);
 		
 		// 類別名稱第一個字母小寫就是"user"
@@ -27,7 +28,7 @@ public class TestMVCUser {
 		
 		//將 user 加入到資料庫中
 		System.out.println("\n將 user 加入到資料庫中");
-		UserController userController = ctx.getBean("usercontroller",UserController.class);
+		UserController userController = ctx.getBean("userController",UserController.class);
 		userController.insert(user1);
 		userController.insert(user2);
 		

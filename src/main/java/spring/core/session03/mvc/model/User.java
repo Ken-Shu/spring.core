@@ -20,7 +20,7 @@ import java.util.Map;
 //	"spring\\core\\session03\\mvc\\repository\\UserDaoImpl",
 //	"spring\\core\\session03\\mvc\\service\\UserServiceImpl"
 //})
-@Configuration
+//@Configuration
 @Scope(value = "prototype")
 @PropertySource(value = "classpath:user.properities")
 //@PropertySource(value = "file:///C:\\Users\\MB-207\\git\\spring.core\\conf\\user.properities")
