@@ -11,27 +11,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import spring.core.session06.entity.Emp;
+import spring.core.session06.entity.Job;
 import spring.core.session06.templat.EmpDao;
 
-public class TestEmpDao3 {
+public class TestEmpDao5 {
 	
 	@Test
 	public void test() {
 		//使用 xml 配置
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc-config.xml");
 		EmpDao empDao = ctx.getBean("empDao" , EmpDao.class);
-		List<Emp> emps = empDao.queryAll5();
-		//emps.forEach(System.out::println);
+		// 單筆查詢測試
+		Emp emp = empDao.getEmpById(1,true);
+		System.out.println(emp);
+//		Job job = empDao.getJobById(3);
+//		System.out.println(job);
 		
-		// 想要印出 每個員工有哪些工作
-		//emps.forEach(e -> System.out.printf("姓名 : %s  工作 : %s\n",e.getEname(),e.getJobs()));
+		Job job2 = empDao.getJobById(5, true);
+		System.out.println(job2);
 		
-		emps.forEach(e -> {
-			String empName = e.getEname();
-			List<String> jobNames = e.getJobs().stream().map(j -> j.getJname()).collect(Collectors.toList());
-			// 移除 null
-			jobNames.remove(null);			
-			System.out.printf("員工姓名 : %s 工作名稱 : %s \n",empName,jobNames);
-		});
 	}
 }
