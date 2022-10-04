@@ -16,7 +16,13 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import spring.core.session06.entity.Emp;
 import spring.core.session06.entity.Job;
@@ -30,6 +36,9 @@ public class EmpDao {
 	
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
+	@Autowired
+	private ComboPooledDataSource dataSource;
 	
 	// 多筆查詢 : 全部查詢 I
 	public List<Map<String, Object>> queryAll(){
@@ -249,5 +258,28 @@ public class EmpDao {
 		// 刪除一樣也是使用 update
 		return jdbcTemplate.update(sql,eid);
 	}
-	
+	//同時新增2筆資料(任何一筆失敗都會進行回滾)
+	public int[] addTwoTx(String ename1 , Integer age1 , String ename2 , Integer age2) {
+		int []rowcounts = new int[2];
+		// 1. 建立 TransactionManager
+		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+		// 2. 定義 TransactionDefinition
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED); // 請求一個交易
+		// 3. 交易狀態封裝(rollback 或是 commit 時使用)
+		TransactionStatus status = transactionManager.getTransaction(def);
+		// 4. 交易處理
+		try {
+			String sql = "insert into emp(ename,age) values(?,?)";
+			rowcounts[0] = jdbcTemplate.update(sql,ename1,age1); // 已經加入資料表(若無誤)
+			rowcounts[1] = jdbcTemplate.update(sql,ename2,age2); // 已經加入資料表(若無誤)
+		} catch (Exception e) {
+			transactionManager.rollback(status); // 交易回滾 (會將資料表剛才加入的紀錄刪除)
+			System.out.println("新增失敗");
+			return null;
+		}
+		transactionManager.commit(status); //交易確認
+		System.out.println("新增成功");
+		return rowcounts;
+	}
 }
